@@ -23,7 +23,7 @@ import { ListadoComponent } from './pages/listado/listado.component';
     CommonModule,
     FlexLayoutModule,
     HeroesRoutingModule,
-    MaterialModule
+    MaterialModule,
   ]
 })
 export class HeroesModule { }
