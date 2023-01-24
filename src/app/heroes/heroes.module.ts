@@ -12,6 +12,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ListadoComponent } from './pages/listado/listado.component';
 import { HeroeCardComponent } from './components/heroe-card/heroe-card.component';
 import { ImagenPipePipe } from './pipes/imagen-pipe.pipe';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ImagenPipePipe } from './pipes/imagen-pipe.pipe';
   imports: [
     CommonModule,
     FlexLayoutModule,
+    FormsModule,
     HeroesRoutingModule,
     MaterialModule,
   ]

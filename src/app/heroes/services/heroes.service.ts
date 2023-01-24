@@ -22,4 +22,9 @@ export class HeroesService {
   getHeroeById(id: string) : Observable<Heroe> {
     return this.http.get<Heroe>(`${this.url}/heroes/${id}`);
   }
+
+  getSugerencias( termino : string) : Observable<Heroe[]> {
+    return this.http.get<Heroe[]>(`${this.url}/heroes?q=${termino}&_limit=6`);
+  }
+
 }
