@@ -1,6 +1,9 @@
-import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { Heroe, Publisher } from '../../interfaces/heroe.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { switchMap } from 'rxjs';
+
+import { Heroe } from '../../interfaces/heroe.interface';
 import { HeroesService } from '../../services/heroes.service';
 
 @Component({
@@ -27,17 +30,38 @@ export class AgregarComponent implements OnInit {
 
   isButtonDisabled : boolean = true;
 
-  constructor(private heroeService : HeroesService) { }
+  constructor(
+    private heroeService : HeroesService,
+    private activatedRouted : ActivatedRoute,
+    private router : Router
+
+  ) { }
 
   ngOnInit(): void {
+    this.activatedRouted.params
+    .pipe(
+      switchMap(({id}) => this.heroeService.getHeroeById(id)),
+    )
+    .subscribe(
+      heroe => {
+        this.heroe = heroe;
+        this.isButtonDisabled = false;
+      });
   }
 
   guardar(){
     if(this.heroe.superhero.trim().length > 0){
-      this.heroeService.agregarHeroe(this.heroe).subscribe({
-        next: (heroe) => this.heroe = heroe,
-        error: (error) => console.log("no se pudo guardar el heroe"),
-      })
+      if(this.heroe.id){
+        this.heroeService.actualizarHeroe(this.heroe).subscribe({
+          next: (heroe) => this.heroe = heroe,
+          error: (error) => console.log("no se pudo actualizar el heroe"),
+        })
+      } else{
+        this.heroeService.agregarHeroe(this.heroe).subscribe({
+          next: (heroe) => this.router.navigate(['/heroes/editar', heroe.id]),
+          error: (error) => console.log("no se pudo guardar el heroe"),
+        })
+      }
     }
   }
 
