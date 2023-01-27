@@ -38,15 +38,19 @@ export class AgregarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.activatedRouted.params
-    .pipe(
-      switchMap(({id}) => this.heroeService.getHeroeById(id)),
-    )
-    .subscribe(
-      heroe => {
-        this.heroe = heroe;
-        this.isButtonDisabled = false;
-      });
+
+    if(this.router.url.includes('editar')){
+      this.activatedRouted.params
+      .pipe(
+        switchMap(({id}) => this.heroeService.getHeroeById(id)),
+      )
+      .subscribe(
+        heroe => {
+          this.heroe = heroe;
+          this.isButtonDisabled = false;
+        });
+    }
+    
   }
 
   guardar(){
