@@ -77,4 +77,13 @@ export class AgregarComponent implements OnInit {
     }
   }
 
+  borrar(){
+    if(this.heroe.id){
+      this.heroeService.borrarHeroe(this.heroe.id).subscribe({
+        next: () => this.router.navigate(['/heroes/listado']),
+        error: () => console.log("No se pudo borrar el heroe"),
+      });
+    }
+  }
+
 }
