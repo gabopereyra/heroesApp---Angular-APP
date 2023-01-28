@@ -10,7 +10,7 @@ export class ImagenPipePipe implements PipeTransform {
   transform(heroe : Heroe): unknown {
     if(!heroe.id && !heroe.alt_imagen) return `assets/no-image.png`;
 
-    if(heroe.id) return `assets/heroes/${ heroe.id }.jpg`;
+    if(heroe.alt_imagen) return heroe.alt_imagen;
 
     return `assets/heroes/${heroe.id}.jpg`;
   }

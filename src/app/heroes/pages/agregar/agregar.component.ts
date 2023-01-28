@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { switchMap } from 'rxjs';
@@ -33,7 +34,8 @@ export class AgregarComponent implements OnInit {
   constructor(
     private heroeService : HeroesService,
     private activatedRouted : ActivatedRoute,
-    private router : Router
+    private router : Router,
+    private _snackBar : MatSnackBar
 
   ) { }
 
@@ -57,13 +59,16 @@ export class AgregarComponent implements OnInit {
     if(this.heroe.superhero.trim().length > 0){
       if(this.heroe.id){
         this.heroeService.actualizarHeroe(this.heroe).subscribe({
-          next: (heroe) => this.heroe = heroe,
-          error: (error) => console.log("no se pudo actualizar el heroe"),
+          next: (heroe) => this.mostrarSnackBar("Se ha actualizado el registro!"),
+          error: (error) => this.mostrarSnackBar("no se pudo actualizar el heroe"),
         })
       } else{
         this.heroeService.agregarHeroe(this.heroe).subscribe({
-          next: (heroe) => this.router.navigate(['/heroes/editar', heroe.id]),
-          error: (error) => console.log("no se pudo guardar el heroe"),
+          next: (heroe) => {
+            this.router.navigate(['/heroes/editar', heroe.id]);
+            this.mostrarSnackBar("Se ha creado el registro!");
+          },
+          error: (error) => this.mostrarSnackBar("no se pudo guardar el heroe"),
         })
       }
     }
@@ -81,9 +86,15 @@ export class AgregarComponent implements OnInit {
     if(this.heroe.id){
       this.heroeService.borrarHeroe(this.heroe.id).subscribe({
         next: () => this.router.navigate(['/heroes/listado']),
-        error: () => console.log("No se pudo borrar el heroe"),
+        error: () => this.mostrarSnackBar("No se pudo borrar el heroe"),
       });
     }
+  }
+
+  mostrarSnackBar(msj : string){
+    this._snackBar.open(msj, 'Cerrar', {
+      duration: 2500
+    });
   }
 
 }
