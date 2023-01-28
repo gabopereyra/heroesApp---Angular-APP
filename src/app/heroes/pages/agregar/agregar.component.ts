@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { switchMap } from 'rxjs';
+import { ConfirmarComponent } from '../../components/confirmar/confirmar.component';
 
 import { Heroe } from '../../interfaces/heroe.interface';
 import { HeroesService } from '../../services/heroes.service';
@@ -35,8 +37,8 @@ export class AgregarComponent implements OnInit {
     private heroeService : HeroesService,
     private activatedRouted : ActivatedRoute,
     private router : Router,
-    private _snackBar : MatSnackBar
-
+    private _snackBar : MatSnackBar,
+    public matDialog : MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -83,12 +85,26 @@ export class AgregarComponent implements OnInit {
   }
 
   borrar(){
-    if(this.heroe.id){
-      this.heroeService.borrarHeroe(this.heroe.id).subscribe({
-        next: () => this.router.navigate(['/heroes/listado']),
-        error: () => this.mostrarSnackBar("No se pudo borrar el heroe"),
-      });
-    }
+    const dialog = this.matDialog.open(ConfirmarComponent,{
+      width: '300px',
+      data: {...this.heroe}
+    });
+
+    dialog.afterClosed().subscribe((result) => {
+      if(result){
+        if(this.heroe.id){
+          this.heroeService.borrarHeroe(this.heroe.id).subscribe({
+            next: () => {
+              this.router.navigate(['/heroes/listado']);
+              this.mostrarSnackBar("Se ha borrado correctamente el heroe")
+            },
+            error: () => this.mostrarSnackBar("No se pudo borrar el heroe"),
+          });
+        }
+      }
+    });
+
+
   }
 
   mostrarSnackBar(msj : string){

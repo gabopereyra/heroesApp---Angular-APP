@@ -1,0 +1,12 @@
+<div style="text-align: center;">
+    <p>Esta a punto de borrar el personaje <strong>{{data.superhero}}</strong></p> 
+    <hr>
+    <p>Esta accion no puede revertirse</p>
+    <hr>
+    <br>
+    <div fxLayout>
+        <button mat-raised-button (click)="cerrar()">Cancelar</button>
+        <span class="spacer"></span>
+        <button mat-raised-button (click)="borrar()" color="warn" >Borrar</button>
+    </div>
+</div>
